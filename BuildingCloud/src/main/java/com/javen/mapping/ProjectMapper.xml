@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javen.dao.ProjectDao">
+	<resultMap id="BaseResultMap" type="com.javen.model.Project">
+		<id column="p_id" property="p_id" jdbcType="INTEGER" />
+		<result column="p_name" property="p_name" jdbcType="VARCHAR" />
+		<result column="area" property="area" jdbcType="INTEGER" />
+		<result column="is_cad" property="is_cad" jdbcType="VARCHAR" />
+		<result column="day" property="day" jdbcType="INTEGER" />
+		<result column="serviceId" property="serviceId" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="payId" property="payId" jdbcType="VARCHAR" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="is_audit" property="is_audit" jdbcType="VARCHAR" />
+		<result column="is_pay" property="is_pay" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="serviceName" property="serviceName" jdbcType="VARCHAR" />
+		<result column="payName" property="payName" jdbcType="VARCHAR" />
+		<result column="u_id" property="u_id" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseResultMap1" type="com.javen.model.ServiceType">
+		<id column="serviceId" property="serviceId" jdbcType="INTEGER" />
+		<result column="serviceName" property="serviceName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.javen.model.PayType">
+		<id column="payId" property="payId" jdbcType="INTEGER" />
+		<result column="payName" property="payName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.javen.model.Project">
+		insert into project(p_id,
+		p_name, area, is_cad, day,serviceId, address, tel, price, payId,
+		comment, is_audit, is_pay, status, u_id)
+		values (#{p_id}, #{p_name},
+		#{area}, #{is_cad}, #{day}, #{serviceId}, #{address}, #{tel},
+		#{price}, #{payId}, #{comment}, #{is_audit}, '未支付', '未完工',#{u_id})
+	</insert>
+
+	<select id="showProject" resultMap="BaseResultMap">
+		select * from
+		project a
+		left join service b
+		on (a.serviceId = b.serviceId)
+		left join paytype c
+		on a.payId = c.payId
+		where a.is_pay = '未支付'
+		and a.is_audit = "通过"
+		and a.u_id = #{u_id}
+	</select>
+	
+	<select id="noPassProject" resultMap="BaseResultMap">
+		select * from
+		project a
+		left join service b
+		on (a.serviceId = b.serviceId)
+		left join paytype c
+		on a.payId = c.payId
+		where a.is_pay = '未支付'
+		and a.is_audit = "未通过"
+		and a.u_id = #{u_id}
+	</select>
+
+	<update id="payProject" parameterType="com.javen.model.Project">
+		update project set is_pay ='已支付' where p_id = #{id}
+	</update>
+
+	<select id="myProject" resultMap="BaseResultMap">
+		select * from project a join orders b where b.u_id = #{u_id} and a.p_id =
+		b.p_id and a.status = '未完工'
+	</select>
+
+	<update id="finishProject">
+		update project set status ='已完工' where p_id = #{p_id}
+	</update>
+
+	<select id="selectService" resultMap="BaseResultMap1">
+		select * from service
+	</select>
+
+	<select id="selectPayType" resultMap="BaseResultMap2">
+		select * from paytype
+	</select>
+	<select id="myFinisheProject" resultMap="BaseResultMap">
+		select * from project  where u_id = #{u_id} and status = '已完工'
+	</select>
+	
+</mapper>

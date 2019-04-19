@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javen.dao.IUserDao" >
+  <resultMap id="BaseResultMap" type="com.javen.model.User" >
+    <id column="u_id" property="u_id" jdbcType="INTEGER" />
+    <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="role_id" property="role_id" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="login" resultMap="BaseResultMap" parameterType="com.javen.model.User">
+    select * from user where user_name = #{user_name} and password = #{password} and role_id = #{role_id}
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select * from user a join role b where a.u_id = #{id} and a.role_id = b.role_id
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where u_id = #{u_id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insertUser" parameterType="com.javen.model.User" >
+    insert into user (u_id, user_name, password, tel, company, role_id, status)
+    values (#{u_id}, #{user_name}, #{password}, #{tel}, #{company}, #{role_id}, #{status})
+  </insert>
+
+  <update id="updatePassword" parameterType="com.javen.model.User">
+    update user set password = #{password} where u_id = #{u_id,jdbcType=INTEGER} 
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.javen.model.User" >
+    update user
+    set user_name = #{user_name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER}
+    where u_id = #{u_id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="isWork" parameterType="com.javen.model.User">
+    update user set status = '1' where u_id = #{u_id} 
+  </update>
+  
+  <update id="noWork" parameterType="com.javen.model.User">
+    update user set status = '2' where u_id = #{u_id} 
+  </update>
+</mapper>

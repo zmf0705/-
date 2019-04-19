@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javen.dao.AdminDao" >
+  <resultMap id="BaseResultMap" type="com.javen.model.User" >
+    <id column="u_id" property="u_id" jdbcType="INTEGER" />
+    <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="role_id" property="role_id" jdbcType="INTEGER" />
+    <result column="u_status" property="u_status" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMaps" type="com.javen.model.Project">
+		<id column="p_id" property="p_id" jdbcType="INTEGER" />
+		<result column="p_name" property="p_name" jdbcType="VARCHAR" />
+		<result column="area" property="area" jdbcType="INTEGER" />
+		<result column="is_cad" property="is_cad" jdbcType="VARCHAR" />
+		<result column="day" property="day" jdbcType="INTEGER" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="is_audit" property="is_audit" jdbcType="VARCHAR" />
+		<result column="is_pay" property="is_pay" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="u_id" property="u_id" jdbcType="INTEGER" />
+	</resultMap>
+  
+  <select id="getAllUser" resultMap="BaseResultMap">
+    select * from user
+  </select>
+  
+  <delete id="deleteUser" parameterType="java.lang.Integer">
+  	delete from user where u_id = #{u_id}
+  </delete>
+  
+  <update id="auditProject" parameterType="java.lang.Integer">
+  	update project set is_audit = '通过' where p_id = #{id}
+  </update>
+  
+  <update id="auditNotProject" parameterType="java.lang.Integer">
+  	update project set is_audit = '未通过' where p_id = #{id}
+  </update>
+  
+  <select id="getAllProject" resultMap="BaseResultMaps">
+  	select * from project where is_audit = '0'
+  </select>
+  
+  <select id="showProject" resultMap="BaseResultMaps">
+  	select * from project where is_pay = '已支付' and status = '未完工'
+  </select>
+  
+  <select id="adminLogin" resultMap="BaseResultMap">
+  	select * from user where user_name = #{user_name} and password = #{password} and role_id = #{role_id}
+  </select>
+  
+  <select id="showRole2" resultMap="BaseResultMap">
+  	select * from user where role_id = '2' and status = '1'
+  </select>
+  
+  <insert id="appointProject" parameterType="java.lang.Integer">
+  	insert into orders (p_id, u_id)
+  	values (#{p_id}, #{u_id})
+  </insert>
+  
+  <insert id="audit">
+  	insert into audit (p_id, audit_advice, audit_time) values (#{id}, #{word}, #{date})
+  </insert>
+</mapper>

@@ -1,0 +1,77 @@
+/* Styles for demo page only - not required */
+body {
+	background: #fff;
+	color: #333;
+	padding: 15px 20px;
+	font-family: Helvetica, Arial, sans-serif;
+	line-height: 1.5em;
+}
+
+a {
+	color: #0496b6
+}
+
+
+
+.tabs ul, .tabs ol, .tabs p {
+	margin-top: 0;
+	padding-top: 1em;
+}
+
+.tabs ul li, .tabs ol li {
+	margin-bottom: 0.5em;
+}
+
+.btn {
+	display: block;
+	float: left;
+	padding: 10px 15px;
+	background: #0496b6;
+	font-size: 1.5em;
+	color: #fff;
+	font-weight: bold;
+	text-decoration: none;
+	border-radius: 5px;
+	text-align: center;
+	box-shadow: 2px 2px 2px #eee;
+}
+
+.btn:hover {
+	background: #3cb7d3
+}
+
+.clearfix {
+	*zoom: 1;
+}
+
+.clearfix:before, .clearfix:after {
+	display: table;
+	content: "";
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.intro {
+	margin: 20px 0;
+	background: #c9f6f9;
+	border: 1px solid #ccc;
+	box-shadow: 2px 2px 2px #eee;
+	padding: 5px 15px 10px 15px;
+}
+
+p.demo-intro {
+	font-size: 1.2em;
+	margin-bottom: -0.5em;
+	font-weight: bold;
+}
+
+@media ( max-width : 767px) {
+
+	.btn {
+		width: 80%;
+		margin: 20px auto;
+		float: none;
+	}
+}
